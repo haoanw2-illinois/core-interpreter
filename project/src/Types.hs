@@ -5,7 +5,17 @@ module Types where
 
 import qualified Data.HashMap.Lazy as M
 
-type Env = M.HashMap Name Int  -- You will probably need to change this
+-- NEW: runtime values
+-- in Types.hs
+data Value
+  = VInt Int
+  | VClosure [Name] Expr Env
+  | VPack Int [Value]          -- fully constructed value: tag + fields
+  | VConstr Int Int [Value]    -- constructor in-progress: tag, arity, captured args
+  deriving (Eq, Show)
+
+type Env = M.HashMap Name Value
+
 
 type Name = String
 type IsRec = Bool
